@@ -18,7 +18,10 @@ function addWord(newWord) {
     //' '_5jmm''    //_5pat  //_5pbx
     chrome.storage.sync.set({
       words: JSON.stringify([...newWords, newWord])
-    }, listWords);
+    }, () => {
+      document.getElementById('wordinput').value = '';
+      listWords();
+    });
   });
 }
 
