@@ -5,7 +5,6 @@ document.addEventListener('DOMNodeInserted', () => {
     allPosts.map(post => {
       currentWords.forEach(word => {
         if (post.textContent.includes(word)) {
-          console.log(word)
           post.style.display = 'none';
         }
       })
