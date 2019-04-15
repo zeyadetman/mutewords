@@ -2,11 +2,28 @@
   "name": "Mute Words on Facebook",
   "version": "1.0",
   "description": "Mute words on facebook newsfeed!",
-  "permissions": ["storage"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "*://*.facebook.com/*"
+  ],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "background.js"
+    ],
     "persistent": false
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.facebook.com/",
+        "*://*.facebook.com/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
   "browser_action": {
     "default_popup": "popup.html"
   },
