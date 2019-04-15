@@ -3,10 +3,13 @@
 
 <head>
   <style>
-    button {
-      height: 30px;
-      width: 30px;
-      outline: none;
+    button:hover {
+      pointer: cursor;
+    }
+    
+    li {
+      margin-bottom: 8px;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -17,7 +20,10 @@
     padding: 5px;
     border: 2px solid #3a559fb0;
 " />
-  <ul id="currentwords"></ul>
+  <ul id="currentwords" style="
+    list-style: none;
+    padding: 5px;
+"></ul>
   <div style="
     text-align: center;
 "><button id="clearall" style="
