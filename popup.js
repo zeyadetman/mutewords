@@ -1,32 +1,31 @@
 listWords();
 
-document.getElementById("wordinput").addEventListener("keypress", e => {
-  if (e.key === "Enter") {
-    addWord(document.getElementById("wordinput").value);
-    listWords();
-  }
+const wordinput = document.getElementById("wordinput");
+wordinput.addEventListener("keypress", e => {
+  if (!(e.key === "Enter")) return;
+  chrome.runtime.sendMessage({ method: 'addWord', text: wordinput.value });
+  wordinput.value = '';
 });
 
-document.getElementById('clearall').addEventListener('click', e => {
-  clearAll()
-})
+document.getElementById('clearall').addEventListener('click', clearAll)
+document.getElementById('currentwords').addEventListener('click', removeWord)
 
-function addWord(newWord) {
-  chrome.storage.sync.get(["words"], result => {
-    const newWordsObject = "{}" === JSON.stringify(result) ? { words: [] } : result;
-    const newWords = newWordsObject.words.length > 0 ? JSON.parse(newWordsObject.words) : newWordsObject.words;
-    //' '_5jmm''    //_5pat  //_5pbx
+function removeWord(e) {
+  if (e.target.className !== 'delete-word') return;
+  const { text } = e.target.dataset;
+  if (!text) return;
+  chrome.storage.sync.get(["words"], res => {
+    const { words = "[]" } = res;
+    const filteredWords = JSON.parse(words).filter(i => i !== text);
     chrome.storage.sync.set({
-      words: JSON.stringify([...newWords, newWord])
+      words: JSON.stringify(filteredWords)
     }, () => {
-      document.getElementById('wordinput').value = '';
       listWords();
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, { method: "remove" });
+      });
     });
   });
-}
-
-function removeWord() {
-  /* TODO */
 }
 
 function clearAll() {
@@ -35,9 +34,13 @@ function clearAll() {
 
 function listWords() {
   chrome.storage.sync.get(["words"], res => {
-    const currentWords = "{}" !== JSON.stringify(res) ? JSON.parse(res.words) : [];
-    let listItems = '';
-    currentWords.map(itm => listItems += `<li>${itm}</li>`)
+    const { words = "[]" } = res;
+    const listItems = JSON.parse(words).reduce((agg, itm) => agg.concat(`<li>${itm}<span data-text=${itm} class="delete-word">X</span></li>`), '')
     document.getElementById("currentwords").innerHTML = listItems;
   });
 }
+
+
+chrome.runtime.onMessage.addListener(({ method, text }) => {
+  if (method === 'listWords') listWords();
+});
