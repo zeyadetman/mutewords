@@ -1,3 +1,4 @@
+// just check if user select anyword now
 window.chrome.runtime.onInstalled.addListener(() => {
   window.chrome.contextMenus.removeAll(() => {
     window.chrome.contextMenus.create({
