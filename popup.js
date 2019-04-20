@@ -1,7 +1,7 @@
 function listWords() {
   window.chrome.storage.sync.get(['words'], (res) => {
     const { words = '[]' } = res;
-    const listItems = JSON.parse(words).reduce((agg, itm) => agg.concat(`<li>${itm}<span data-text=${itm} class="delete-word">X</span></li>`), '');
+    const listItems = JSON.parse(words).reduce((agg, itm) => agg.concat(`<li>${itm}<span data-text="${itm}" class="delete-word">X</span></li>`), '');
     document.getElementById('currentwords').innerHTML = listItems;
   });
 }

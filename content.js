@@ -1,6 +1,7 @@
 const state = {
   postsLength: 0,
   wordsLength: 0,
+  lastPostIndex: 0,
 };
 
 const methodsCases = {
@@ -11,13 +12,15 @@ const methodsCases = {
       if (allPosts.length === state.postsLength && currentWords.length === state.wordsLength) return;
       state.postsLength = allPosts.length;
       state.wordsLength = currentWords.length;
-      allPosts.forEach((post) => {
-        currentWords.forEach((word) => {
-          if (post.style.display === 'none') return;
+      allPosts.slice(state.lastPostIndex).forEach((post, i) => {
+        currentWords.find((word) => {
+          if (post.style.display === 'none') return true;
           if (post.textContent.toLowerCase().includes(word.toLowerCase())) {
             post.style.display = 'none';
-            return undefined; // critical return
+            state.lastPostIndex = i;
+            return true;
           }
+          return false;
         });
       });
     });
