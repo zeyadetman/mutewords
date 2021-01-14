@@ -4,9 +4,11 @@ const state = {
   lastPostIndex: 0,
 };
 
+const classesToRemove = ['ecm0bbzt', '_5jmm'];
+
 const methodsCases = {
   remove() {
-    const allPosts = Array.from(document.getElementsByClassName('_5jmm'));
+    const allPosts = classesToRemove.flatMap(className => Array.from(document.getElementsByClassName(className)) );
     window.chrome.storage.sync.get(['words'], (res) => {
       const currentWords = JSON.stringify(res) !== '{}' ? JSON.parse(res.words) : [];
       if (allPosts.length === state.postsLength && currentWords.length === state.wordsLength) return;
