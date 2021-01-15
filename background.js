@@ -12,7 +12,6 @@ function addWord(newWord) {
   newWord = newWord.trim();
   if (!newWord) return;
   window.chrome.storage.sync.get(['words'], (result) => {
-    // ' '_5jmm''    //_5pat  //_5pbx
     const { words = '[]' } = result;
     const parsedWords = JSON.parse(words);
     if (parsedWords.find(w => w === newWord)) {
